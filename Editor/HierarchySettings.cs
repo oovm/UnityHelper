@@ -140,7 +140,18 @@ namespace Hierarchy2
         }
 
         public ComponentDisplayMode componentDisplayMode = ComponentDisplayMode.Ignore;
-        public string[] components = new string[] {"Transform", "RectTransform"};
+        public string[] IgnoreComponents = new string[] { };
+        private bool ignoreTransformer = true;
+        private bool ignoreRenderer = true;
+        public string[] TransformComponents = new string[] {
+            "Transform", "RectTransform"
+        };
+
+        public string[] RenderComponents = new string[] {
+            "CanvasRenderer",
+            "SpriteRenderer"
+        };
+
         [HideInInspector] public int componentLimited = 0;
         [Range(12, 16)] public int componentSize = 16;
         public int componentSpacing = 0;
@@ -197,6 +208,22 @@ namespace Hierarchy2
                     float TITLE_MARGIN_BOTTOM = 8;
                     float CONTENT_MARGIN_LEFT = 10;
 
+                    Func<string, bool, Toggle> SettingsToggle = (string field, bool bind) =>
+                    {
+                        var toggle = new Toggle(field);
+                        toggle.value = bind;
+                        toggle.RegisterValueChangedCallback((evt) =>
+                        {
+                            Undo.RecordObject(settings, "Change Settings");
+
+                            bind = evt.newValue;
+                            settings.OnSettingsChanged(nameof(bind));
+                        });
+                        toggle.StyleMarginLeft(CONTENT_MARGIN_LEFT);
+                        toggle.StyleDisplay(true);
+                        return toggle;
+                    };
+
                     HorizontalLayout horizontalLayout = new HorizontalLayout();
                     horizontalLayout.style.backgroundColor = new Color(0, 0, 0, 0.2f);
                     horizontalLayout.style.paddingTop = 4;
@@ -236,16 +263,7 @@ namespace Hierarchy2
                     Object.StyleMargin(0, 0, 0, TITLE_MARGIN_BOTTOM);
                     verticalLayout.Add(Object);
 
-                    var displayCustomObjectIcon = new Toggle("Display Custom Icon");
-                    displayCustomObjectIcon.value = settings.displayCustomObjectIcon;
-                    displayCustomObjectIcon.RegisterValueChangedCallback((evt) =>
-                    {
-                        Undo.RecordObject(settings, "Change Settings");
-
-                        settings.displayCustomObjectIcon = evt.newValue;
-                        settings.OnSettingsChanged(nameof(settings.displayCustomObjectIcon));
-                    });
-                    displayCustomObjectIcon.StyleMarginLeft(CONTENT_MARGIN_LEFT);
+                    Toggle displayCustomObjectIcon = SettingsToggle("Display Custom Icon", settings.displayCustomObjectIcon);
                     verticalLayout.Add(displayCustomObjectIcon);
 
                     var View = new Label("View");
@@ -253,40 +271,13 @@ namespace Hierarchy2
                     View.StyleMargin(0, 0, TITLE_MARGIN_TOP, TITLE_MARGIN_BOTTOM);
                     verticalLayout.Add(View);
 
-                    var displayRowBackground = new Toggle("Display RowBackground");
-                    displayRowBackground.value = settings.displayRowBackground;
-                    displayRowBackground.RegisterValueChangedCallback((evt) =>
-                    {
-                        Undo.RecordObject(settings, "Change Settings");
-
-                        settings.displayRowBackground = evt.newValue;
-                        settings.OnSettingsChanged(nameof(settings.displayRowBackground));
-                    });
-                    displayRowBackground.StyleMarginLeft(CONTENT_MARGIN_LEFT);
+                    Toggle displayRowBackground = SettingsToggle("Display RowBackground", settings.displayRowBackground);
                     verticalLayout.Add(displayRowBackground);
 
-                    var displayTreeView = new Toggle("Display TreeView");
-                    displayTreeView.value = settings.displayTreeView;
-                    displayTreeView.RegisterValueChangedCallback((evt) =>
-                    {
-                        Undo.RecordObject(settings, "Change Settings");
-
-                        settings.displayTreeView = evt.newValue;
-                        settings.OnSettingsChanged(nameof(settings.displayTreeView));
-                    });
-                    displayTreeView.StyleMarginLeft(CONTENT_MARGIN_LEFT);
+                    Toggle displayTreeView = SettingsToggle("Display TreeView", settings.displayTreeView);
                     verticalLayout.Add(displayTreeView);
 
-                    var displayGrid = new Toggle("Display Grid");
-                    displayGrid.value = settings.displayGrid;
-                    displayGrid.RegisterValueChangedCallback((evt) =>
-                    {
-                        Undo.RecordObject(settings, "Change Settings");
-
-                        settings.displayGrid = evt.newValue;
-                        settings.OnSettingsChanged(nameof(settings.displayGrid));
-                    });
-                    displayGrid.StyleMarginLeft(CONTENT_MARGIN_LEFT);
+                    Toggle displayGrid = SettingsToggle("Display Grid", settings.displayGrid);
                     verticalLayout.Add(displayGrid);
 
                     var Components = new Label("Components");
@@ -312,7 +303,7 @@ namespace Hierarchy2
                     {
                         Undo.RecordObject(settings, "Change Settings");
 
-                        settings.componentAlignment = (ElementAlignment) evt.newValue;
+                        settings.componentAlignment = (ElementAlignment)evt.newValue;
                         settings.OnSettingsChanged(nameof(settings.componentAlignment));
                     });
                     componentAlignment.StyleMarginLeft(CONTENT_MARGIN_LEFT);
@@ -324,25 +315,36 @@ namespace Hierarchy2
                     verticalLayout.Add(componentDisplayMode);
 
                     var componentListInput = new TextField("Components");
-                    componentListInput.value = string.Join(" ", settings.components);
+
+                    var ignoreComponentList = new TextField("Ignore Components");
+
+                    componentListInput.value = string.Join(" ", settings.IgnoreComponents);
                     componentListInput.StyleMarginLeft(CONTENT_MARGIN_LEFT);
-                    verticalLayout.Add(componentListInput);
                     componentListInput.RegisterValueChangedCallback((evt) =>
                     {
                         Undo.RecordObject(settings, "Change Settings");
 
-                        settings.components = evt.newValue.Split(' ');
-                        settings.OnSettingsChanged(nameof(settings.components));
+                        settings.IgnoreComponents = evt.newValue.Split(' ');
+                        settings.OnSettingsChanged(nameof(settings.IgnoreComponents));
                     });
+                    verticalLayout.Add(componentListInput);
+
+                    Toggle ignoreTransformer = SettingsToggle("Ignore Transformers", settings.ignoreTransformer);
+                    verticalLayout.Add(ignoreTransformer);
+                    Toggle ignoreRenderer = SettingsToggle("Ignore Renderer", settings.ignoreRenderer);
+                    verticalLayout.Add(ignoreRenderer);
+
                     componentDisplayMode.RegisterValueChangedCallback((evt) =>
                     {
                         Undo.RecordObject(settings, "Change Settings");
 
-                        settings.componentDisplayMode = (ComponentDisplayMode) evt.newValue;
+                        settings.componentDisplayMode = (ComponentDisplayMode)evt.newValue;
                         switch (settings.componentDisplayMode)
                         {
                             case ComponentDisplayMode.Specified:
                                 componentListInput.StyleDisplay(true);
+                                ignoreTransformer.StyleDisplay(false);
+                                ignoreRenderer.StyleDisplay(false);
                                 break;
 
                             case ComponentDisplayMode.Ignore:
@@ -351,10 +353,14 @@ namespace Hierarchy2
 
                             case ComponentDisplayMode.All:
                                 componentListInput.StyleDisplay(false);
+                                ignoreTransformer.StyleDisplay(false);
+                                ignoreRenderer.StyleDisplay(false);
                                 break;
 
                             case ComponentDisplayMode.ScriptOnly:
                                 componentListInput.StyleDisplay(false);
+                                ignoreTransformer.StyleDisplay(false);
+                                ignoreRenderer.StyleDisplay(false);
                                 break;
                         }
 
@@ -451,7 +457,7 @@ namespace Hierarchy2
                     {
                         Undo.RecordObject(settings, "Change Settings");
 
-                        settings.tagAlignment = (ElementAlignment) evt.newValue;
+                        settings.tagAlignment = (ElementAlignment)evt.newValue;
                         settings.OnSettingsChanged(nameof(settings.tagAlignment));
                     });
                     tagAlignment.StyleMarginLeft(CONTENT_MARGIN_LEFT);
@@ -488,7 +494,7 @@ namespace Hierarchy2
                     {
                         Undo.RecordObject(settings, "Change Settings");
 
-                        settings.layerAlignment = (ElementAlignment) evt.newValue;
+                        settings.layerAlignment = (ElementAlignment)evt.newValue;
                         settings.OnSettingsChanged(nameof(settings.layerAlignment));
                     });
                     layerAlignment.StyleMarginLeft(CONTENT_MARGIN_LEFT);
@@ -561,7 +567,7 @@ namespace Hierarchy2
                     {
                         Undo.RecordObject(settings, "Change Settings");
 
-                        settings.contentDisplay = (ContentDisplay) evt.newValue;
+                        settings.contentDisplay = (ContentDisplay)evt.newValue;
                         settings.OnSettingsChanged(nameof(settings.contentDisplay));
                     });
                     contentMaskEnumFlags.style.marginLeft = CONTENT_MARGIN_LEFT;
@@ -753,7 +759,7 @@ namespace Hierarchy2
 
                 deactivateHandler = () => Undo.undoRedoPerformed -= OnUndoRedoPerformed,
 
-                keywords = new HashSet<string>(new[] {"Hierarchy"})
+                keywords = new HashSet<string>(new[] { "Hierarchy" })
             };
 
             return provider;
@@ -765,7 +771,7 @@ namespace Hierarchy2
 
             if (instance != null)
             {
-                instance.onSettingsChanged?.Invoke(nameof(instance.components)); // Refresh components on undo & redo
+                instance.onSettingsChanged?.Invoke(nameof(instance.IgnoreComponents)); // Refresh components on undo & redo
             }
         }
 

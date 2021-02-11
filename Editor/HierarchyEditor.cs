@@ -189,7 +189,7 @@ namespace Hierarchy2
         {
             settings = HierarchySettings.GetAssets();
             if (settings is null) return;
-            OnSettingsChanged(nameof(settings.components));
+            OnSettingsChanged(nameof(settings.IgnoreComponents));
             settings.onSettingsChanged += OnSettingsChanged;
 
             resources = HierarchyResources.GetAssets();
@@ -214,9 +214,9 @@ namespace Hierarchy2
         {
             switch (param)
             {
-                case nameof(settings.components):
+                case nameof(settings.IgnoreComponents):
                     dicComponents.Clear();
-                    foreach (string componentType in settings.components)
+                    foreach (string componentType in settings.IgnoreComponents)
                     {
                         if (!dicComponents.ContainsKey(componentType))
                             dicComponents.Add(componentType, componentType);
