@@ -4,29 +4,23 @@
   "version": "0.1.0",
   "unity": "2019.3",
   "unityRelease": "7f1",
-  "description": "This is a template package, used as a basis to build a bigger one.",
+  "description": "com.xi.unity.hierarchy2",
   "category": "Tool",
   "type": "tool",
   "license": "MIT",
   "author": {
     "name": "Aster",
-    "email": "support@omiyagames.com",
-    "url": "https://www.omiyagames.com"
+    "email": "192608617@qq.com",
+    "url": "https://"
   },
   "dependencies": {
     "com.unity.ext.nunit": "1.0.0"
   },
   "keywords": [
-    "Xi Games",
+    "Xi Framework",
     "Scripts",
     "Template",
     "Tool"
   ],
-  "samples": [
-    {
-      "displayName": "Example 1",
-      "description": "This sample is just an example",
-      "path": "Gizmos"
-    }
-  ]
+  "samples": []
 }

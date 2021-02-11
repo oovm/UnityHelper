@@ -1,8 +1,8 @@
 {
     "name": "Hierarchy2.Editor",
-    "rootNamespace": "",
+    "rootNamespace": "Hierarchy2",
     "references": [
-        "Hierarchy2.Runtime"
+        "GUID:301929b7186ac9542b7511b3e4692309"
     ],
     "includePlatforms": [
         "Editor"

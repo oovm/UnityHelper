@@ -1,6 +1,6 @@
 {
     "name": "Hierarchy2.Runtime",
-    "rootNamespace": "",
+    "rootNamespace": "Hierarchy2",
     "references": [],
     "includePlatforms": [],
     "excludePlatforms": [],
