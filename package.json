@@ -1,26 +1,26 @@
 {
-  "name": "com.xi.unity.hierarchy2",
-  "displayName": "Xi - Hierarchy",
-  "version": "0.1.0",
-  "unity": "2019.3",
-  "unityRelease": "7f1",
-  "description": "com.xi.unity.hierarchy2",
-  "category": "Tool",
-  "type": "tool",
-  "license": "MIT",
-  "author": {
-    "name": "Aster",
-    "email": "192608617@qq.com",
-    "url": "https://"
-  },
-  "dependencies": {
-    "com.unity.ext.nunit": "1.0.0"
-  },
-  "keywords": [
-    "Xi Framework",
-    "Scripts",
-    "Template",
-    "Tool"
-  ],
-  "samples": []
+    "name": "com.xi.unity.hierarchy",
+    "displayName": "Xi - Hierarchy",
+    "version": "0.1.0",
+    "unity": "2019.3",
+    "unityRelease": "7f1",
+    "description": "com.xi.unity.hierarchy",
+    "category": "Tool",
+    "type": "tool",
+    "license": "MIT",
+    "author": {
+        "name": "Xi Framework",
+        "email": "",
+        "url": "https://"
+    },
+    "dependencies": {
+        "com.unity.ext.nunit": "1.0.0"
+    },
+    "keywords": [
+        "Xi Framework",
+        "Scripts",
+        "Template",
+        "Tool"
+    ],
+    "samples": []
 }

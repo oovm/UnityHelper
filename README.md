@@ -23,8 +23,14 @@ openupm add com.omiyagames.template
 
 ## Resources
 
-- [Documentation](https://omiyagames.github.io/template-unity-package/)
-- [Change Log](/CHANGELOG.md)
+### Folder Inspector
+
+Preview the folder structure in the Inspector:
+
+![](./.github/Readme/FolderInspector.png)
+
+
+
 
 ## LICENSE
 

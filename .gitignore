@@ -55,13 +55,21 @@ Desktop.ini
 # ====== #
 *.orig
 *.orig.meta
+CHANGELOG.md.meta
+LICENSE.md
+README.md
+Third Party Notices.md
+package.json.meta
 
-# ====== #
-# Visual Code files
-# ====== #
+# VSCode files
 VSCode.meta
 VSCode/*
 .vscode
+
+# IDEA files
+.idea
+*.iml
+*.iml.meta
 
 # ====== #
 # Others #
