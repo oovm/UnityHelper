@@ -138,19 +138,23 @@ namespace Hierarchy2
             Specified = 2,
             Ignore = 3
         }
-
         public ComponentDisplayMode componentDisplayMode = ComponentDisplayMode.Ignore;
-        public string[] IgnoreComponents = new string[] { };
-        private bool ignoreTransformer = true;
-        private bool ignoreRenderer = true;
         public string[] TransformComponents = new string[] {
             "Transform", "RectTransform"
         };
 
-        public string[] RenderComponents = new string[] {
+        public string[] RendererComponents = new string[] {
             "CanvasRenderer",
             "SpriteRenderer"
         };
+
+        public string[] ShowComponents = new string[] { };
+        public bool showTransformer = true;
+        public bool showRenderer = true;
+
+        public string[] IgnoreComponents = new string[] { };
+        public bool ignoreTransformer = true;
+        public bool ignoreRenderer = true;
 
         [HideInInspector] public int componentLimited = 0;
         [Range(12, 16)] public int componentSize = 16;
@@ -208,22 +212,6 @@ namespace Hierarchy2
                     float TITLE_MARGIN_BOTTOM = 8;
                     float CONTENT_MARGIN_LEFT = 10;
 
-                    Func<string, bool, Toggle> SettingsToggle = (string field, bool bind) =>
-                    {
-                        var toggle = new Toggle(field);
-                        toggle.value = bind;
-                        toggle.RegisterValueChangedCallback((evt) =>
-                        {
-                            Undo.RecordObject(settings, "Change Settings");
-
-                            bind = evt.newValue;
-                            settings.OnSettingsChanged(nameof(bind));
-                        });
-                        toggle.StyleMarginLeft(CONTENT_MARGIN_LEFT);
-                        toggle.StyleDisplay(true);
-                        return toggle;
-                    };
-
                     HorizontalLayout horizontalLayout = new HorizontalLayout();
                     horizontalLayout.style.backgroundColor = new Color(0, 0, 0, 0.2f);
                     horizontalLayout.style.paddingTop = 4;
@@ -263,7 +251,16 @@ namespace Hierarchy2
                     Object.StyleMargin(0, 0, 0, TITLE_MARGIN_BOTTOM);
                     verticalLayout.Add(Object);
 
-                    Toggle displayCustomObjectIcon = SettingsToggle("Display Custom Icon", settings.displayCustomObjectIcon);
+                    var displayCustomObjectIcon = new Toggle("Display Custom Icon");
+                    displayCustomObjectIcon.value = settings.displayCustomObjectIcon;
+                    displayCustomObjectIcon.RegisterValueChangedCallback((evt) =>
+                    {
+                        Undo.RecordObject(settings, "Change Settings");
+
+                        settings.displayCustomObjectIcon = evt.newValue;
+                        settings.OnSettingsChanged(nameof(settings.displayCustomObjectIcon));
+                    });
+                    displayCustomObjectIcon.StyleMarginLeft(CONTENT_MARGIN_LEFT);
                     verticalLayout.Add(displayCustomObjectIcon);
 
                     var View = new Label("View");
@@ -271,13 +268,40 @@ namespace Hierarchy2
                     View.StyleMargin(0, 0, TITLE_MARGIN_TOP, TITLE_MARGIN_BOTTOM);
                     verticalLayout.Add(View);
 
-                    Toggle displayRowBackground = SettingsToggle("Display RowBackground", settings.displayRowBackground);
+                    var displayRowBackground = new Toggle("Display RowBackground");
+                    displayRowBackground.value = settings.displayRowBackground;
+                    displayRowBackground.RegisterValueChangedCallback((evt) =>
+                    {
+                        Undo.RecordObject(settings, "Change Settings");
+
+                        settings.displayRowBackground = evt.newValue;
+                        settings.OnSettingsChanged(nameof(settings.displayRowBackground));
+                    });
+                    displayRowBackground.StyleMarginLeft(CONTENT_MARGIN_LEFT);
                     verticalLayout.Add(displayRowBackground);
 
-                    Toggle displayTreeView = SettingsToggle("Display TreeView", settings.displayTreeView);
+                    var displayTreeView = new Toggle("Display TreeView");
+                    displayTreeView.value = settings.displayTreeView;
+                    displayTreeView.RegisterValueChangedCallback((evt) =>
+                    {
+                        Undo.RecordObject(settings, "Change Settings");
+
+                        settings.displayTreeView = evt.newValue;
+                        settings.OnSettingsChanged(nameof(settings.displayTreeView));
+                    });
+                    displayTreeView.StyleMarginLeft(CONTENT_MARGIN_LEFT);
                     verticalLayout.Add(displayTreeView);
 
-                    Toggle displayGrid = SettingsToggle("Display Grid", settings.displayGrid);
+                    var displayGrid = new Toggle("Display Grid");
+                    displayGrid.value = settings.displayGrid;
+                    displayGrid.RegisterValueChangedCallback((evt) =>
+                    {
+                        Undo.RecordObject(settings, "Change Settings");
+
+                        settings.displayGrid = evt.newValue;
+                        settings.OnSettingsChanged(nameof(settings.displayGrid));
+                    });
+                    displayGrid.StyleMarginLeft(CONTENT_MARGIN_LEFT);
                     verticalLayout.Add(displayGrid);
 
                     var Components = new Label("Components");
@@ -314,58 +338,133 @@ namespace Hierarchy2
                     componentDisplayMode.StyleMarginLeft(CONTENT_MARGIN_LEFT);
                     verticalLayout.Add(componentDisplayMode);
 
-                    var componentListInput = new TextField("Components");
+                    var showComponentList = new TextField("Show Components");
+                    showComponentList.value = string.Join(" ", settings.ShowComponents);
+                    showComponentList.StyleMarginLeft(CONTENT_MARGIN_LEFT);
+                    showComponentList.RegisterValueChangedCallback((evt) =>
+                    {
+                        Undo.RecordObject(settings, "Change Settings");
+
+                        settings.ShowComponents = evt.newValue.Split(' ');
+                        settings.OnSettingsChanged(nameof(settings.ShowComponents));
+                    });
+                    verticalLayout.Add(showComponentList);
+
+                    var showTransformer = new Toggle("Show Transformers");
+                    showTransformer.value = settings.showTransformer;
+                    showTransformer.RegisterValueChangedCallback((evt) =>
+                    {
+                        Undo.RecordObject(settings, "Change Settings");
+
+                        settings.showTransformer = evt.newValue;
+                        settings.OnSettingsChanged(nameof(settings.showTransformer));
+                    });
+                    showTransformer.StyleMarginLeft(CONTENT_MARGIN_LEFT);
+                    verticalLayout.Add(showTransformer);
+
+                    var showRenderer = new Toggle("Show Renderer");
+                    showRenderer.value = settings.showRenderer;
+                    showRenderer.RegisterValueChangedCallback((evt) =>
+                    {
+                        Undo.RecordObject(settings, "Change Settings");
+
+                        settings.showRenderer = evt.newValue;
+                        settings.OnSettingsChanged(nameof(settings.showRenderer));
+                    });
+                    showRenderer.StyleMarginLeft(CONTENT_MARGIN_LEFT);
+                    verticalLayout.Add(showRenderer);
 
                     var ignoreComponentList = new TextField("Ignore Components");
-
-                    componentListInput.value = string.Join(" ", settings.IgnoreComponents);
-                    componentListInput.StyleMarginLeft(CONTENT_MARGIN_LEFT);
-                    componentListInput.RegisterValueChangedCallback((evt) =>
+                    ignoreComponentList.value = string.Join(" ", settings.IgnoreComponents);
+                    ignoreComponentList.StyleMarginLeft(CONTENT_MARGIN_LEFT);
+                    ignoreComponentList.RegisterValueChangedCallback((evt) =>
                     {
                         Undo.RecordObject(settings, "Change Settings");
 
                         settings.IgnoreComponents = evt.newValue.Split(' ');
                         settings.OnSettingsChanged(nameof(settings.IgnoreComponents));
                     });
-                    verticalLayout.Add(componentListInput);
+                    verticalLayout.Add(ignoreComponentList);
 
-                    Toggle ignoreTransformer = SettingsToggle("Ignore Transformers", settings.ignoreTransformer);
-                    verticalLayout.Add(ignoreTransformer);
-                    Toggle ignoreRenderer = SettingsToggle("Ignore Renderer", settings.ignoreRenderer);
-                    verticalLayout.Add(ignoreRenderer);
 
-                    componentDisplayMode.RegisterValueChangedCallback((evt) =>
+                    var ignoreTransformer = new Toggle("Ignore Transformers");
+                    ignoreTransformer.value = settings.ignoreTransformer;
+                    ignoreTransformer.RegisterValueChangedCallback((evt) =>
                     {
                         Undo.RecordObject(settings, "Change Settings");
 
-                        settings.componentDisplayMode = (ComponentDisplayMode)evt.newValue;
+                        settings.ignoreTransformer = evt.newValue;
+                        settings.OnSettingsChanged(nameof(settings.ignoreTransformer));
+                    });
+                    ignoreTransformer.StyleMarginLeft(CONTENT_MARGIN_LEFT);
+                    verticalLayout.Add(ignoreTransformer);
+
+                    var ignoreRenderer = new Toggle("Ignore Renderer");
+                    ignoreRenderer.value = settings.ignoreRenderer;
+                    ignoreRenderer.RegisterValueChangedCallback((evt) =>
+                    {
+                        Undo.RecordObject(settings, "Change Settings");
+
+                        settings.ignoreRenderer = evt.newValue;
+                        settings.OnSettingsChanged(nameof(settings.ignoreRenderer));
+                    });
+                    ignoreRenderer.StyleMarginLeft(CONTENT_MARGIN_LEFT);
+                    verticalLayout.Add(ignoreRenderer);
+
+                    Action refershComponentDisplayMode = () =>
+                    {
                         switch (settings.componentDisplayMode)
                         {
                             case ComponentDisplayMode.Specified:
-                                componentListInput.StyleDisplay(true);
+                                showComponentList.StyleDisplay(true);
+                                showTransformer.StyleDisplay(true);
+                                showRenderer.StyleDisplay(true);
+
+                                ignoreComponentList.StyleDisplay(false);
                                 ignoreTransformer.StyleDisplay(false);
                                 ignoreRenderer.StyleDisplay(false);
                                 break;
 
                             case ComponentDisplayMode.Ignore:
-                                componentListInput.StyleDisplay(true);
+                                showComponentList.StyleDisplay(false);
+                                showTransformer.StyleDisplay(false);
+                                showRenderer.StyleDisplay(false);
+
+                                ignoreComponentList.StyleDisplay(true);
+                                ignoreTransformer.StyleDisplay(true);
+                                ignoreRenderer.StyleDisplay(true);
                                 break;
 
                             case ComponentDisplayMode.All:
-                                componentListInput.StyleDisplay(false);
+                                showComponentList.StyleDisplay(false);
+                                showTransformer.StyleDisplay(false);
+                                showRenderer.StyleDisplay(false);
+
+                                ignoreComponentList.StyleDisplay(false);
                                 ignoreTransformer.StyleDisplay(false);
                                 ignoreRenderer.StyleDisplay(false);
                                 break;
 
                             case ComponentDisplayMode.ScriptOnly:
-                                componentListInput.StyleDisplay(false);
+                                showComponentList.StyleDisplay(false);
+                                showTransformer.StyleDisplay(false);
+                                showRenderer.StyleDisplay(false);
+
+                                ignoreComponentList.StyleDisplay(false);
                                 ignoreTransformer.StyleDisplay(false);
                                 ignoreRenderer.StyleDisplay(false);
                                 break;
                         }
+                    };
 
+                    componentDisplayMode.RegisterValueChangedCallback((evt) =>
+                    {
+                        Undo.RecordObject(settings, "Change Settings");
+                        settings.componentDisplayMode = (ComponentDisplayMode)evt.newValue;
+                        refershComponentDisplayMode();
                         settings.OnSettingsChanged(nameof(settings.componentDisplayMode));
                     });
+                    refershComponentDisplayMode();
 
                     var componentSizeEnum = ComponentSize.Normal;
                     switch (settings.componentSize)
@@ -764,6 +863,38 @@ namespace Hierarchy2
 
             return provider;
         }
+
+        public List<string> GetIgnoreComponents()
+        {
+            var list = new List<string>();
+            list.AddRange(IgnoreComponents);
+            if (ignoreTransformer)
+            {
+                list.AddRange(TransformComponents);
+            }
+            if (ignoreRenderer)
+            {
+                list.AddRange(RendererComponents);
+            }
+            return list;
+        }
+
+        public List<string> GetShowComponents()
+        {
+            var list = new List<string>();
+            list.AddRange(ShowComponents);
+
+            if (showTransformer)
+            {
+                list.AddRange(TransformComponents);
+            }
+            if (showRenderer)
+            {
+                list.AddRange(RendererComponents);
+            }
+            return list;
+        }
+
 
         private static void OnUndoRedoPerformed()
         {

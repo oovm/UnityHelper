@@ -57,10 +57,20 @@ MonoBehaviour:
   offSetIconAfterName: 8
   displayComponents: 1
   componentAlignment: 1
-  componentDisplayMode: 3
-  components:
+  componentDisplayMode: 2
+  TransformComponents:
   - Transform
   - RectTransform
+  RendererComponents:
+  - CanvasRenderer
+  - SpriteRenderer
+  ShowComponents: []
+  showTransformer: 0
+  showRenderer: 0
+  IgnoreComponents:
+  - TMP
+  ignoreTransformer: 1
+  ignoreRenderer: 1
   componentLimited: 0
   componentSize: 16
   componentSpacing: 2

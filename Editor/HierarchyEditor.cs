@@ -35,7 +35,7 @@ namespace Hierarchy2
         }
 
         Dictionary<int, UnityEngine.Object> selectedComponents = new Dictionary<int, UnityEngine.Object>();
-        Dictionary<string, string> dicComponents = new Dictionary<string, string>(StringComparer.Ordinal);
+        Dictionary<string, string> dictComponents = new Dictionary<string, string>(StringComparer.Ordinal);
         UnityEngine.Object activeComponent;
 
         GUIContent tooltipContent = new GUIContent();
@@ -212,19 +212,19 @@ namespace Hierarchy2
 
         void OnSettingsChanged(string param)
         {
-            switch (param)
-            {
-                case nameof(settings.IgnoreComponents):
-                    dicComponents.Clear();
-                    foreach (string componentType in settings.IgnoreComponents)
-                    {
-                        if (!dicComponents.ContainsKey(componentType))
-                            dicComponents.Add(componentType, componentType);
-                    }
-
-                    break;
-            }
-
+            // switch (param)
+            // {
+            //     case nameof(settings.IgnoreComponents):
+            //         dicComponents.Clear();
+            //         foreach (string componentType in settings.GetIgnoreComponents())
+            //         {
+            //             if (!dicComponents.ContainsKey(componentType))
+            //             {
+            //                 dicComponents.Add(componentType, componentType);
+            //             }
+            //         }
+            //         break;
+            // }
             EditorApplication.RepaintHierarchyWindow();
         }
 
@@ -621,7 +621,7 @@ namespace Hierarchy2
 
                 ElementEvent(rowItem);
 
-                FINISH:
+            FINISH:
                 if (settings.displayGrid)
                     DisplayGrid();
 
@@ -948,12 +948,28 @@ namespace Hierarchy2
                                 break;
 
                             case HierarchySettings.ComponentDisplayMode.Specified:
-                                if (!dicComponents.ContainsKey(comType.Name))
+                                dictComponents.Clear();
+                                foreach (string componentType in settings.GetShowComponents())
+                                {
+                                    if (!dictComponents.ContainsKey(componentType))
+                                    {
+                                        dictComponents.Add(componentType, componentType);
+                                    }
+                                }
+                                if (!dictComponents.ContainsKey(comType.Name))
                                     continue;
                                 break;
 
                             case HierarchySettings.ComponentDisplayMode.Ignore:
-                                if (dicComponents.ContainsKey(comType.Name))
+                                dictComponents.Clear();
+                                foreach (string componentType in settings.GetIgnoreComponents())
+                                {
+                                    if (!dictComponents.ContainsKey(componentType))
+                                    {
+                                        dictComponents.Add(componentType, componentType);
+                                    }
+                                }
+                                if (dictComponents.ContainsKey(comType.Name))
                                     continue;
                                 break;
                         }
@@ -1413,7 +1429,7 @@ namespace Hierarchy2
 
         bool IsFirstRow(Rect rect) => rect.y / rect.height == 0;
 
-        int GetRowIndex(Rect rect) => (int) (rect.y / rect.height);
+        int GetRowIndex(Rect rect) => (int)(rect.y / rect.height);
 
         bool InSelection(int ID) => Selection.Contains(ID) ? true : false;
 
@@ -1650,8 +1666,8 @@ namespace Hierarchy2
                     {
                         alphaTexture = new Texture2D(16, 16, TextureFormat.RGBA32, false);
                         for (int x = 0; x < 16; ++x)
-                        for (int y = 0; y < 16; ++y)
-                            alphaTexture.SetPixel(x, y, Color.clear);
+                            for (int y = 0; y < 16; ++y)
+                                alphaTexture.SetPixel(x, y, Color.clear);
                         alphaTexture.Apply();
                     }
 
@@ -1743,7 +1759,8 @@ namespace Hierarchy2
                 border = new RectOffset(12, 12, 8, 8),
             };
 
-            [System.Obsolete] internal static GUIStyle DirtyLabel = new GUIStyle(EditorStyles.label)
+            [System.Obsolete]
+            internal static GUIStyle DirtyLabel = new GUIStyle(EditorStyles.label)
             {
                 padding = new RectOffset(-1, 0, 0, 0),
                 margin = new RectOffset(0, 0, 0, 0),
@@ -1754,7 +1771,7 @@ namespace Hierarchy2
             internal static GUIStyle Header = new GUIStyle(TreeBoldLabel)
             {
                 richText = true,
-                normal = new GUIStyleState() {textColor = Color.white}
+                normal = new GUIStyleState() { textColor = Color.white }
             };
 
             internal static GUIStyle TreeBoldLabel
@@ -1765,7 +1782,7 @@ namespace Hierarchy2
             internal static GUIStyle TreeLabel = new GUIStyle(TreeView.DefaultStyles.label)
             {
                 richText = true,
-                normal = new GUIStyleState() {textColor = Color.white}
+                normal = new GUIStyleState() { textColor = Color.white }
             };
         }
 
