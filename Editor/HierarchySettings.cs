@@ -145,7 +145,8 @@ namespace Hierarchy2
 
         public string[] RendererComponents = new string[] {
             "CanvasRenderer",
-            "SpriteRenderer"
+            "SpriteRenderer",
+            "MeshRenderer", "LineRenderer"
         };
 
         public string[] ShowComponents = new string[] { };
