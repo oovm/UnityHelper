@@ -1,6 +1,6 @@
 ﻿using UnityEditor;
 using UnityEngine;
-using Zx.Math;
+using Zx.Config;
 using Component = Zx.UI.EmptyRaycast;
 
 namespace Zx.UI

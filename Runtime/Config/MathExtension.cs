@@ -1,6 +1,6 @@
 using UnityEngine;
 
-namespace Zx.Math
+namespace Zx.Config
 {
     public static class MathExtension
     {
