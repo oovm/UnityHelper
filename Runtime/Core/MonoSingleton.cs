@@ -1,7 +1,7 @@
 ﻿using System;
 using UnityEngine;
 
-namespace Core
+namespace Zx.Core
 {
     public abstract class MonoSingleton<T> : MonoBehaviour where T : MonoBehaviour
     {

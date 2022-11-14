@@ -1,6 +1,6 @@
 using System;
 
-namespace Core
+namespace Zx.Core
 {
     public abstract class Singleton<T> where T : class, new()
     {

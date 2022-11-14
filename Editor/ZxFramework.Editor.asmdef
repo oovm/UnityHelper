@@ -2,7 +2,7 @@
     "name": "ZxFramework.Editor",
     "rootNamespace": "Zx",
     "references": [
-        "GUID:301929b7186ac9542b7511b3e4692309"
+        "GUID:147a92e60d21aaa43ac455ea48e31616"
     ],
     "includePlatforms": [
         "Editor"
