@@ -1,6 +1,6 @@
 using UnityEngine;
 
-namespace Zx.Config
+namespace Zx.Extensions
 {
     public static class MathExtension
     {
@@ -55,15 +55,25 @@ namespace Zx.Config
             return color;
         }
 
+        public static Color Grey(float value)
+        {
+            return new Color(value, value, value, 1.0f);
+        }
+
         public static Color32 WithAlpha(this Color32 color, byte alpha)
         {
             color.a = alpha;
             return color;
         }
 
-        public static Color Grey(float value)
+        public static Color32 Grey(byte value)
         {
-            return new Color(value, value, value);
+            return new Color32(value, value, value, 255);
+        }
+
+        public static string UnixPath(this string path)
+        {
+            return path.Replace("\\", "/");
         }
     }
 }

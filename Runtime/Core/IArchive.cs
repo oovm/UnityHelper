@@ -6,14 +6,14 @@ using System.Runtime.Serialization;
 using System.Runtime.Serialization.Formatters.Binary;
 using UnityEngine;
 
-namespace Zx.Config
+namespace Zx.Core
 {
     /// <summary>
     /// 存档类
     /// </summary>
     /// <typeparam name="T"></typeparam>
     [Serializable]
-    public abstract class IArchive<T> : ICloneable<T>, ISerializable where T : new()
+    public abstract class IArchive<T> : ISerializable where T : new()
     {
         public T Clone()
         {

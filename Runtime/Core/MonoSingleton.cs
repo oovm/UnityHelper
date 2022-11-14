@@ -8,7 +8,7 @@ namespace Zx.Core
         private static readonly Lazy<T> lazy = new(LazyCreate());
         public static T Instance => lazy.Value;
         protected abstract void Initialize();
-
+        public abstract void Clear();
         private static T LazyCreate()
         {
             var owner = new GameObject($"Create Singleton {typeof(T).Name}");
