@@ -1,8 +1,12 @@
 {
-    "name": "Hierarchy2.Runtime",
-    "rootNamespace": "Hierarchy2",
-    "references": [],
-    "includePlatforms": [],
+    "name": "ZxFramework.Editor",
+    "rootNamespace": "Zx",
+    "references": [
+        "GUID:301929b7186ac9542b7511b3e4692309"
+    ],
+    "includePlatforms": [
+        "Editor"
+    ],
     "excludePlatforms": [],
     "allowUnsafeCode": false,
     "overrideReferences": false,
