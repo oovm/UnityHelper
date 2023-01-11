@@ -1,23 +1,24 @@
 {
-    "name": "com.xi.unity.hierarchy",
-    "displayName": "Xi - Hierarchy",
+    "name": "com.zx.framework",
+    "displayName": "Zx - Framework",
     "version": "0.1.0",
     "unity": "2019.3",
     "unityRelease": "7f1",
-    "description": "com.xi.unity.hierarchy",
+    "description": "Zx Framework\n Details: https://github.com/oovm/UnityZx",
     "category": "Tool",
     "type": "tool",
     "license": "MIT",
     "author": {
-        "name": "Xi Framework",
-        "email": "",
-        "url": "https://"
+        "name": "Zx Framework",
+        "email": "192608617@qq.com",
+        "url": "https://https://github.com/oovm/UnityZx"
     },
     "dependencies": {
         "com.unity.ext.nunit": "1.0.0"
     },
     "keywords": [
-        "Xi Framework",
+        "Zx",
+        "Framework",
         "Scripts",
         "Template",
         "Tool"
