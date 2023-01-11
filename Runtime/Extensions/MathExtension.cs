@@ -13,6 +13,13 @@ namespace Zx.Extensions
         {
             return new Vector2(v.x, y);
         }
+        
+
+        public static Vector3 EulerAngle(this Vector2 v)
+        {
+            return new Vector3(0, 0, -Mathf.Atan2(v.x, v.y) * Mathf.Rad2Deg);
+        }
+        
 
         public static Vector3 WithX(this Vector3 v, float x)
         {

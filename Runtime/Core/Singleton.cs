@@ -7,6 +7,6 @@ namespace Zx.Core
         private static readonly Lazy<T> lazy = new(() => new T());
         public static T Instance => lazy.Value;
         protected abstract void Initialize();
-        public abstract void Clear();
+        protected abstract void Clear();
     }
 }
